@@ -1,0 +1,29 @@
+version: "3"
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: unless-stopped
+    environment:
+      - DOMAIN
+    ports:
+      - 80:80
+      - 443:443 # mapping port 443 to the container's port 443 for https
+    volumes:
+      - ./nginx/templates/main:/etc/nginx/templates
+      - ./nginx/letsencrypt:/etc/letsencrypt # mounting the folder to the nginx container 
+      - ./nginx/certbot/data:/var/www/certbot
+      - ./nginx/content:/etc/nginx/html
+  certbot:
+    container_name: certbot
+    image: certbot/certbot:latest
+    environment:
+      - DOMAIN
+      - EMAIL
+    depends_on:
+      - nginx
+    command: >-
+      certonly --reinstall --webroot --webroot-path=/var/www/certbot --email "${EMAIL}" --agree-tos -d "${DOMAIN}"
+    volumes:
+      - ./nginx/letsencrypt:/etc/letsencrypt
+      - ./nginx/certbot/data:/var/www/certbot
