@@ -1,7 +1,7 @@
 Run the script
 ```sh
 chmod +x install.sh
-./install.sh rbi-oktay1.<my_ip>.sslip.io oktay.savdi@gmail.com
+./install.sh rbi-oktay1.<my-ip>.sslip.io oktay.savdi@gmail.com
 ```
 
 
